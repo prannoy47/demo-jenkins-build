@@ -4,7 +4,10 @@ node {
     stage('Clone repository') {
         checkout scm
     }
-
+    stage('Initialize Docker') {
+        def dockerHome = tool 'docker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
     stage('Build image') {
         app = docker.build("prannoy47/nodeapp")
     }
