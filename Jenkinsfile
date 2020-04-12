@@ -27,7 +27,7 @@ node {
     }
 
     stage('Deploy Application to k8s cluster') {      
-        sh("ssh root@10.55.234.249 kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/apps/nodeapp-deployment.yaml")
+        sh("ssh centos@34.203.199.124 kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/apps/nodeapp-deployment.yaml")
     }
 
 }
