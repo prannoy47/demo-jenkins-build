@@ -25,4 +25,9 @@ node {
     stage('Remove Unused docker image') {      
         sh("docker rmi -f prannoy47/nodeapp")
     }
+
+    stage('Deploy Application to k8s cluster') {      
+        sh("ssh root@10.55.234.249 kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/apps/nodeapp-deployment.yaml")
+    }
+
 }
