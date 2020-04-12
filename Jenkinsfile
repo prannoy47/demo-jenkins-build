@@ -10,7 +10,7 @@ node {
 
     stage('Test image') {      
         app.inside {
-            echo "Tests Passed"
+            input('Do you want to proceed?')
         }
     }
 
@@ -24,10 +24,6 @@ node {
 	
     stage('Remove Unused docker image') {      
         sh("docker rmi -f prannoy47/nodeapp")
-    }
-
-    stage('Deploy Application to k8s cluster') {      
-        sh("ssh -o StrictHostKeyChecking=no centos@34.203.199.124 kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/apps/nodeapp-deployment.yaml")
     }
 
 }
