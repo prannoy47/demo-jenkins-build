@@ -26,4 +26,10 @@ node {
         sh("docker rmi -f prannoy47/nodeapp")
     }
 
+    stage('Apply Kubernetes files') {
+	withKubeConfig([credentialsId: 'user1', serverUrl: 'https://api.k8s.my-company.com']) {
+	   sh 'kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/nodeapp-deployment.yaml'
+    }
+
+
 }
