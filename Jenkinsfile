@@ -1,35 +1,46 @@
-node {
-    def app
+pipeline {
+   environment {
+        registry = "prannoy47/demo-build"
+        registryCredential = 'dockerhub'
+   }
+   agent any
 
-    stage('Clone repository') {
-        checkout scm
-    }
-    stage('Build image') {
-        app = docker.build("prannoy47/nodeapp")
-    }
-
-    stage('Test image') {      
-        app.inside {
+   stages {
+      stage('Cloning Git') {
+         steps {
+            git 'https://github.com/prannoy47/demo-jenkins-build.git'
+         }
+      }
+      stage('Building Image') {
+         steps {
+            script {
+                docker.build registry + ":$BUILD_NUMBER"
+            }
+         }
+      }
+      stage('Test Image') {
+         steps {
             input('Do you want to proceed?')
+         }
+      }
+      stage('Push Docker Image') {
+         steps {
+            script {
+                docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                    dockerImage.push("new")
+                }
+            }
+         }
+      }
+      stage('Remove Unused docker image') {
+         steps {
+            sh "docker rmi $registry:$BUILD_NUMBER"\
+        }
+      }
+      stage('Apply Kubernetes files') {
+        withKubeConfig([credentialsId: 'kubernetes-admin']) {
+            sh "kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/nodeapp-deployment.yaml"
         }
     }
-
-    stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-            } 
-                echo "Trying to Push Docker Build to DockerHub"
-    }
-	
-    stage('Remove Unused docker image') {      
-        sh("docker rmi -f prannoy47/nodeapp")
-    }
-
-    stage('Apply Kubernetes files') {
-	withKubeConfig([credentialsId: 'kubernetes-admin']) {
-	   sh 'kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/nodeapp-deployment.yaml'
-	}
-    }
-
+   }
 }
