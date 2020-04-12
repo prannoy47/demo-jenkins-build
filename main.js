@@ -1,18 +1,14 @@
-var http = require('http'),                                                
-    Stream = require('stream').Transform,                                  
-    fs = require('fs');                                                    
+// load the http module
+var http = require('http');
 
-var url = 'https://github.com/prannoy47/demo-jenkins-build/blob/master/HPE-Container-Platform_logo_1.png';                    
+// configure our HTTP server
+var server = http.createServer(function (request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.write(<h1 style="color:green; font-size:5em; font-weight:100;">
+                        Hello Containers...
+                    </h1>);
+});
 
-http.request(url, function(response) {                                        
-  var data = new Stream();                                                    
-
-  response.on('data', function(chunk) {                                       
-    data.push(chunk);                                                         
-  });                                                                         
-
-  response.on('end', function() {                                             
-    fs.writeFileSync('image.png', data.read());                               
-  });                                                                         
-}).listen(8000);
+// listen on localhost:8000
+server.listen(8000);
 console.log("Server listening on port 8000 :  http://127.0.0.1:8000/");
