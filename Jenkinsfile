@@ -5,7 +5,7 @@ node {
         checkout scm
     }
     stage('Build image') {
-        app = docker.build("prannoy47/demo-build")
+        app = docker.build("prannoy47/node-app")
     }
 
     stage('Test image') {      
@@ -17,13 +17,12 @@ node {
     stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("latest")
-	    app.push("${env.BUILD_NUMBER}")
             } 
                 echo "Trying to Push Docker Build to DockerHub"
     }
 	
     stage('Remove Unused docker image') {      
-        sh("docker image rm -f prannoy47/demo-build")
+        sh("docker image rm -f prannoy47/node-app")
     }
 
     stage('Apply Kubernetes files') {
