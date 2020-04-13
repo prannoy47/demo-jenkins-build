@@ -28,7 +28,7 @@ node {
 
     stage('Apply Kubernetes files') {
         withKubeConfig([credentialsId: 'kubernetes-admin']) {
-            sh 'kubectl apply -f /opt/bluedata/share/demo-k8s/nsfshare/nodeapp-deployment.yaml'
+            sh 'kubectl apply -f /opt/bluedata/share/demo-k8s/nfsshare/nodeapp-deployment.yaml'
         }
     }
 
