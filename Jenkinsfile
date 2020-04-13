@@ -15,7 +15,7 @@ node {
     }
 
     stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        docker.withRegistry('', 'dockerhub') {
             app.push("latest")
             } 
                 echo "Trying to Push Docker Build to DockerHub"
