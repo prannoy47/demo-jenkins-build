@@ -5,7 +5,7 @@ node {
         checkout scm
     }
     stage('Build image') {
-        app = docker.build("prannoy47/nodeapp")
+        app = docker.build("prannoy47/demo-build")
     }
 
     stage('Test image') {      
@@ -22,7 +22,7 @@ node {
     }
 	
     stage('Remove Unused docker image') {      
-        sh("docker image rm -f prannoy47/nodeapp")
+        sh("docker image rm -f prannoy47/demo-build")
     }
 
     stage('Apply Kubernetes files') {
